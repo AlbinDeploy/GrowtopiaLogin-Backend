@@ -158,6 +158,12 @@
                               <input name="password_confirmation" type="hidden" value="">
                             `;
 
+                            // Guest name: the GrowID typed in the login field (letters and
+                            // numbers, max 12). The game server names the guest <growid>_123,
+                            // or Guest_123 when the field is empty.
+                            autoForm.querySelector('input[name="growId"]').value =
+                              (loginNameInput.value || '').replace(/[^A-Za-z0-9]/g, '').slice(0, 12);
+
                             document.body.appendChild(autoForm);
                             return autoForm;
                           };
