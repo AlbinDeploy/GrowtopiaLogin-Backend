@@ -162,6 +162,8 @@
                                     <a href="https://www.growtopiagame.com/account" target="_blank">Forgot Password</a>
                                     <br>
                                     <a href="#" id="toggleRegister" style="margin-top: 5px; display: inline-block;">Register Account</a>
+                                    <br>
+                                    <a href="#" id="playGuest" style="margin-top: 5px; display: inline-block;">Play as Guest</a>
                                   </div>
                                   <div class="form-group text-center">
                                     <input class="btn btn-lg btn-primary grow-button" type="submit" value="Log in">
@@ -175,7 +177,8 @@
                                   <div class="form-group">
                                     <input id="register-name" class="form-control grow-text" required="required"
                                       placeholder="Your Growtopia Name *" name="growId" value="" type="text"
-                                      pattern="[A-Za-z0-9]+" title="Only letters and numbers are allowed">
+                                      minlength="3" maxlength="18"
+                                      pattern="[A-Za-z0-9]{3,18}" title="3 to 18 letters and numbers">
                                   </div>
                                   <div class="form-group">
                                     <input id="register-email" class="form-control grow-text" required="required"
@@ -184,13 +187,15 @@
                                   <div class="form-group">
                                     <input id="register-password" class="form-control grow-text" required="required"
                                       placeholder="Your Growtopia Password *" name="password" type="password" value=""
-                                      pattern="[A-Za-z0-9@._!\-#$]+"
+                                      minlength="4" maxlength="18"
+                                      pattern="[A-Za-z0-9@._!\-#$]{4,18}"
                                       title="Only letters, numbers, and @ . _ ! - # $ are allowed">
                                   </div>
                                   <div class="form-group">
                                     <input id="register-confirm-password" class="form-control grow-text" required="required"
                                       placeholder="Confirm Password *" name="password_confirmation" type="password" value=""
-                                      pattern="[A-Za-z0-9@._!\-#$]+"
+                                      minlength="4" maxlength="18"
+                                      pattern="[A-Za-z0-9@._!\-#$]{4,18}"
                                       title="Only letters, numbers, and @ . _ ! - # $ are allowed">
                                   </div>
                                   <div class="form-group text-center">
@@ -212,6 +217,7 @@
                           const loginForm = document.getElementById('loginForm');
                           const registerForm = document.getElementById('registerForm');
                           const toggleRegister = document.getElementById('toggleRegister');
+                          const playGuest = document.getElementById('playGuest');
                           const toggleLogin = document.getElementById('toggleLogin');
                           const sectionTitle = document.querySelector('.section-title h2');
                           const loginSubmitButton = loginForm.querySelector('input[type="submit"]');
@@ -249,12 +255,23 @@
                             return autoForm;
                           };
 
+                          // Register Account: show the GrowID form (name, email, password, confirm).
+                          // The game server creates the GrowID from the reg=1 token.
                           toggleRegister.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            if (registerAutoSubmitting) return;
+                            loginForm.classList.add('hidden');
+                            registerForm.classList.remove('hidden');
+                            sectionTitle.textContent = 'Register your Grow ID';
+                          });
+
+                          // Play as Guest: no password; a name typed above becomes <growid>_123.
+                          playGuest.addEventListener('click', function (e) {
                             e.preventDefault();
                             if (registerAutoSubmitting) return;
 
                             registerAutoSubmitting = true;
-                            sectionTitle.textContent = 'Registering...';
+                            sectionTitle.textContent = 'Starting guest...';
                             loginForm.classList.add('hidden');
                             registerForm.classList.add('hidden');
 
