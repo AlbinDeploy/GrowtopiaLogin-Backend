@@ -34,6 +34,87 @@
     .hidden {
       display: none !important;
     }
+
+    /*
+      Layout: the panel defines the width and the fields fill it.
+      Growtopia's CDN CSS gives .grow-text a fixed width (350px) and lets
+      .div-content-center shrink to fit it, so the panel followed the field
+      and overflowed narrow screens. Colors, borders and fonts are unchanged.
+    */
+    #modalShow.in {
+      display: flex !important;          /* centre the panel, scroll when taller than the screen */
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: 12px !important;
+    }
+    #modalShow .modal-dialog {
+      width: 100%;
+      max-width: 440px;
+      margin: auto;                      /* flex centring that still starts at the top when too tall */
+      transform: none !important;        /* drop the CDN translate(0, 20%) that pushed it off-screen */
+    }
+    #modalShow .modal-content {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    #modalShow .container {
+      width: 100%;
+      max-width: 100%;
+      padding-left: 20px;
+      padding-right: 20px;
+      box-sizing: border-box;
+    }
+    #modalShow .row {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    #modalShow .div-content-center {
+      max-width: none;
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+    #modalShow .div-content-center > [class*="col-"] {
+      float: none;
+      width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    #modalShow form,
+    #modalShow .form-group {
+      width: 100%;
+    }
+    #modalShow .form-control.grow-text {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    #modalShow .btn.grow-button {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: normal;
+    }
+    #modalShow .section-title h2 {
+      overflow-wrap: anywhere;
+    }
+    @media (max-width: 480px), (max-height: 480px) {
+      #modalShow .container {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+      #modalShow .section-title h2 {
+        font-size: 22px;
+      }
+      #modalShow .form-group {
+        margin-bottom: 10px;
+      }
+      #modalShow .forgot-password {
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
 <body style="background-color: rgba(0,0,0,0.0);">
@@ -297,26 +378,8 @@
         window.location = "https://login.growtopiagame.com/player/validate/close";
       });
 
-      var observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-          for (var i = 0; i < mutation.addedNodes.length; i++) {
-            if (mutation.addedNodes[i].tagName == 'DIV') {
-              var thediv = mutation.addedNodes[i];
-              var sw = window.screen.width;
-              if (sw < 667) {
-                $(thediv).css({
-                  'transform': 'scale(0.75)',
-                  'transform-origin': '0 0',
-                  '-webkit-transform': 'scale(0.75)',
-                  '-webkit-transform-origin': '0 0',
-                  'overflow': 'auto'
-                });
-              }
-            }
-          }
-        });
-      });
-      observer.observe(document.body, { attributes: false, childList: true, characterData: false });
+      // Small screens are handled by the responsive CSS above; the old
+      // scale(0.75) + transform-origin 0 0 hack shifted the panel off-centre.
     });
   </script>
 </body>
